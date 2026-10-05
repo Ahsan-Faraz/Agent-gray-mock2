@@ -39,7 +39,7 @@ function StepRail({ step, summary }: { step: number; summary: string[] }) {
       const current = index === step;
       return <li key={label} className="relative flex gap-3 pb-6 last:pb-0" aria-current={current ? "step" : undefined}>
         {index < STEPS.length - 1 && <span className={clsx("absolute left-[13px] top-7 h-[calc(100%-1.75rem)] w-px", done ? "bg-brand-500" : "bg-line-strong")} aria-hidden="true" />}
-        <span className={clsx("relative z-10 grid size-7 shrink-0 place-items-center rounded-full border font-mono text-xs", done ? "border-brand-500 bg-brand-600 text-white" : current ? "border-brand-500 bg-brand-50 text-brand-ink" : "border-line-strong bg-surface text-muted")}>
+        <span className={clsx("relative z-10 grid size-7 shrink-0 place-items-center rounded-full border text-xs", done ? "border-brand-500 bg-brand-600 text-white" : current ? "border-brand-500 bg-brand-50 text-brand-ink" : "border-line-strong bg-surface text-muted")}>
           {done ? <Check size={14} strokeWidth={3} aria-hidden="true" /> : index + 1}
         </span>
         <span className="pt-0.5">
@@ -128,18 +128,18 @@ export function NewListForm({ availableCredits, contacts, totals }: { availableC
     <div className="grid items-start gap-5 lg:grid-cols-[220px_minmax(0,1fr)]">
       <aside className="lg:sticky lg:top-20">
         <div className="hidden lg:block"><StepRail step={step} summary={summary} /></div>
-        <p className="font-mono text-xs text-muted lg:hidden">Step {step + 1} of {STEPS.length} · <span className="text-navy">{STEPS[step]}</span></p>
+        <p className="text-xs text-muted lg:hidden">Step {step + 1} of {STEPS.length} · <span className="text-navy">{STEPS[step]}</span></p>
         <div className="mt-6 hidden rounded-lg border border-line bg-surface p-4 lg:block">
           <dl className="grid gap-2 text-[13px]">
-            <div className="flex justify-between gap-2"><dt className="text-muted">New contacts</dt><dd className="font-mono tabular-nums">{number(counts.newContacts)}</dd></div>
-            <div className="flex justify-between gap-2"><dt className="text-muted">Previously processed / re-run</dt><dd className="font-mono tabular-nums">{number(counts.rerun)}</dd></div>
+            <div className="flex justify-between gap-2"><dt className="text-muted">New contacts</dt><dd className="tabular-nums">{number(counts.newContacts)}</dd></div>
+            <div className="flex justify-between gap-2"><dt className="text-muted">Previously processed / re-run</dt><dd className="tabular-nums">{number(counts.rerun)}</dd></div>
           </dl>
         </div>
       </aside>
 
       <div className="min-w-0">
         {step === 0 && <StepCard title="Contacts" footer={<>
-          <span className="text-[13px] text-muted">New contacts <span className="font-mono text-ink">{number(counts.newContacts)}</span> · Previously processed / re-run <span className="font-mono text-ink">{number(counts.rerun)}</span></span>
+          <span className="text-[13px] text-muted">New contacts <span className="text-ink">{number(counts.newContacts)}</span> · Previously processed / re-run <span className="text-ink">{number(counts.rerun)}</span></span>
           <Button disabled={!contactsReady} onClick={() => setStep(1)}>Continue <ArrowRight size={15} aria-hidden="true" /></Button>
         </>}>
           <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Contacts">
@@ -152,7 +152,7 @@ export function NewListForm({ availableCredits, contacts, totals }: { availableC
           {origin === "csv" ? <div className="mt-5 grid gap-3">
             {csvFile ? <div className="flex items-center gap-3 rounded-md border border-good/40 bg-good-soft px-4 py-3">
               <FileSpreadsheet size={20} className="shrink-0 text-good-ink" aria-hidden="true" />
-              <div className="min-w-0 flex-1"><strong className="block truncate text-sm font-medium text-navy">{csvFile.name}</strong><span className="font-mono text-xs text-muted">{(csvFile.size / 1024).toFixed(1)} KB</span></div>
+              <div className="min-w-0 flex-1"><strong className="block truncate text-sm font-medium text-navy">{csvFile.name}</strong><span className="text-xs text-muted">{(csvFile.size / 1024).toFixed(1)} KB</span></div>
               <button type="button" onClick={() => setCsvFile(null)} className="grid size-8 place-items-center rounded border border-line-strong text-muted hover:text-ink" aria-label="Remove file"><X size={15} /></button>
             </div> : <label htmlFor="list-csv" onDragOver={(event) => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={onDrop} className={clsx("flex cursor-pointer items-center gap-4 rounded-md border border-dashed px-4 py-5 transition", dragging ? "border-brand-500 bg-brand-50" : "border-input hover:bg-nav-hover")}>
               <Upload size={22} className="shrink-0 text-brand-ink" aria-hidden="true" />
@@ -226,7 +226,7 @@ export function NewListForm({ availableCredits, contacts, totals }: { availableC
         </>}>
           <div className="grid grid-cols-3 divide-x divide-line rounded-md border border-line text-center">
             {([["Contacts", total], ["Credits required", total], ["Available credits", availableCredits]] as const).map(([label, value]) => <div key={label} className="px-2 py-3.5">
-              <span className="block text-xs text-muted">{label}</span><strong className="mt-1 block font-mono text-xl tabular-nums text-navy">{number(value)}</strong>
+              <span className="block text-xs text-muted">{label}</span><strong className="mt-1 block text-xl tabular-nums text-navy">{number(value)}</strong>
             </div>)}
           </div>
           <p className="mt-3 text-[13px] text-muted">Credits are reserved when you confirm. Your available balance is checked again at confirmation. Calls run between 09:00 and 20:00 in each receiver&apos;s timezone.</p>
@@ -249,7 +249,7 @@ export function NewListForm({ availableCredits, contacts, totals }: { availableC
                   <span className="text-xs text-muted">{contact.phone || "Not available"} · {contact.location || "No location provided"}</span>
                   {needs ? <>{timezoneInput(contact)}<small className="text-xs text-muted">{contact.timezone_message}{contact.timezone_candidates?.length ? ` Suggestions: ${contact.timezone_candidates.join(", ")}` : ""}</small>
                     <div className="flex gap-2"><Button size="sm" disabled={!drafts[contact.id]?.trim()} onClick={() => saveTimezone([contact.id], drafts[contact.id].trim())}>Save timezone</Button><Button size="sm" variant="ghost" onClick={() => setReview((current) => current.filter((item) => item.id !== contact.id))}>Remove from list</Button></div>
-                  </> : <span className="font-mono text-xs">{contact.timezone}</span>}
+                  </> : <span className="text-xs">{contact.timezone}</span>}
                 </li>;
               })}
             </ul>
@@ -260,9 +260,9 @@ export function NewListForm({ availableCredits, contacts, totals }: { availableC
                   const needs = contact.timezone_status !== "resolved";
                   return <tr key={contact.id} className="border-b border-line align-top last:border-0">
                     <td className={td}><span className="block whitespace-nowrap font-medium text-navy">{contact.name || "Unnamed contact"}</span><span className="text-xs text-muted">{sourceLabel(contact.source)}{contact.is_new ? " · New" : ""}</span></td>
-                    <td className={`${td} whitespace-nowrap font-mono text-xs`}>{contact.phone || "Not available"}</td>
+                    <td className={`${td} whitespace-nowrap text-xs`}>{contact.phone || "Not available"}</td>
                     <td className={td}>{contact.location || <span className="text-muted">No location provided</span>}</td>
-                    <td className={td}>{needs ? <div className="grid gap-1">{timezoneInput(contact)}<small className="text-xs text-muted">{contact.timezone_message}{contact.timezone_candidates?.length ? ` Suggestions: ${contact.timezone_candidates.join(", ")}` : ""}</small></div> : <><span className="block font-mono text-xs text-navy">{contact.timezone}</span><span className="text-xs text-muted">{contact.timezone_label}</span></>}</td>
+                    <td className={td}>{needs ? <div className="grid gap-1">{timezoneInput(contact)}<small className="text-xs text-muted">{contact.timezone_message}{contact.timezone_candidates?.length ? ` Suggestions: ${contact.timezone_candidates.join(", ")}` : ""}</small></div> : <><span className="block text-xs text-navy">{contact.timezone}</span><span className="text-xs text-muted">{contact.timezone_label}</span></>}</td>
                     <td className={td}>{needs ? <div className="flex flex-wrap gap-2"><Button size="sm" disabled={!drafts[contact.id]?.trim()} onClick={() => saveTimezone([contact.id], drafts[contact.id].trim())}>Save timezone</Button><Button size="sm" variant="ghost" onClick={() => setReview((current) => current.filter((item) => item.id !== contact.id))}>Remove from list</Button></div> : <span className="text-muted">Ready</span>}</td>
                   </tr>;
                 })}</tbody>

@@ -19,7 +19,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
       <aside className="flex flex-col justify-between gap-8 border-b border-line bg-sidebar p-7 md:border-b-0 md:border-r md:p-9">
         <Link href="/login" className="flex items-center gap-3 self-start rounded-md" aria-label="Agent Gray home"><LogoMark size={44} /><Logo className="text-lg" /></Link>
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-brand-ink">Contact verification workspace</p>
+          <p className="text-[13px] text-muted">Contact verification workspace</p>
           <h1 className="mt-3 text-[28px] font-semibold leading-tight tracking-tight text-navy lg:text-[32px]">Know Who To Call <span className="block text-brand-200">Before You Call</span></h1>
           <p className="mt-3 text-sm leading-relaxed text-muted">Manage contacts, verification lists, call evidence, and connected CRM synchronization from one workspace.</p>
         </div>

@@ -61,10 +61,10 @@ export default async function DashboardPage() {
             <table className="w-full text-sm">
               <thead><tr className="border-b border-line bg-surface-2"><th className={th}>Contact</th><th className={th}>Status</th><th className={th}>Outcome</th><th className={`${th} text-right`}>Updated</th></tr></thead>
               <tbody>{liveCalls.map((call) => <tr key={call.id} className="border-b border-line last:border-0 hover:bg-nav-hover">
-                <td className={td}><span className="block whitespace-nowrap font-medium text-navy">{call.contact_name || "Unknown contact"}</span><span className="font-mono text-xs text-muted">{call.phone_e164 || "Phone unavailable"}</span></td>
+                <td className={td}><span className="block whitespace-nowrap font-medium text-navy">{call.contact_name || "Unknown contact"}</span><span className="text-xs text-muted">{call.phone_e164 || "Phone unavailable"}</span></td>
                 <td className={td}><StatusBadge value={call.call_status} /></td>
                 <td className={`${td} text-ink`}>{call.final_disposition ? humanize(call.final_disposition) : "—"}</td>
-                <td className={`${td} whitespace-nowrap text-right font-mono text-xs text-muted`}>{dateTime(call.updated_at)}</td>
+                <td className={`${td} whitespace-nowrap text-right text-xs text-muted`}>{dateTime(call.updated_at)}</td>
               </tr>)}</tbody>
             </table>
           </div>
@@ -79,14 +79,13 @@ export default async function DashboardPage() {
         {liveLists.length === 0 ? <EmptyState title="No live lists yet" description="Live lists will appear here after you create one." /> : <ul className="divide-y divide-line">
           {liveLists.map((list) => <li key={list.id}>
             <Link href={`/lists/${list.id}`} className="relative flex items-center gap-3 py-3 pl-5 pr-4 transition hover:bg-nav-hover">
-              <span className={clsx("absolute inset-y-2 left-0 w-[3px] rounded-r", stripeTone[toneFor(list.status)])} aria-hidden="true" />
               <div className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium text-navy">{list.name || `List #${list.id}`}</span>
                 <span className="text-xs text-muted">{number(list.contact_count)} contacts · Created {date(list.created_at)}</span>
               </div>
               <div className="text-right">
                 <StatusBadge value={list.status} />
-                <span className="mt-1 block font-mono text-xs tabular-nums text-muted">{list.progress_percent}%</span>
+                <span className="mt-1 block text-xs tabular-nums text-muted">{list.progress_percent}%</span>
               </div>
             </Link>
           </li>)}

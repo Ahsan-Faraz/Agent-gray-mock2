@@ -8,16 +8,16 @@ import { BRAND, humanize } from "@/lib/format";
 type Variant = "primary" | "outline" | "ghost" | "danger";
 type Size = "sm" | "md";
 
-const buttonBase = "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-45";
+const buttonBase = "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-45";
 const buttonVariant: Record<Variant, string> = {
-  primary: "bg-brand-600 text-white hover:bg-brand-700",
-  outline: "border border-brand-500 text-brand-ink hover:bg-brand-50",
-  ghost: "border border-line-strong bg-surface-2 text-ink hover:border-input hover:bg-nav-hover",
+  primary: "bg-primary text-on-primary hover:bg-primary-hover",
+  outline: "border border-line-strong text-navy hover:border-input hover:bg-nav-hover",
+  ghost: "border border-line text-ink hover:border-line-strong hover:bg-nav-hover",
   danger: "border border-bad/50 text-bad-ink hover:bg-bad-soft",
 };
 const buttonSize: Record<Size, string> = {
   sm: "h-8 px-3 text-[13px]",
-  md: "h-9 px-4 text-sm",
+  md: "h-10 px-4 text-sm",
 };
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md", className?: string) {
@@ -33,13 +33,13 @@ export function ButtonLink({ variant = "primary", size = "md", className, ...pro
 }
 
 export function Card({ className, ...props }: ComponentProps<"section">) {
-  return <section className={clsx("rounded-lg border border-line bg-surface", className)} {...props} />;
+  return <section className={clsx("rounded-xl border border-line bg-surface", className)} {...props} />;
 }
 
 export function CardHeader({ title, description, action }: { title: string; description?: string; action?: ReactNode }) {
-  return <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
+  return <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
     <div>
-      <h2 className="text-sm font-semibold text-navy">{title}</h2>
+      <h2 className="text-[15px] font-medium text-navy">{title}</h2>
       {description && <p className="mt-0.5 text-[13px] text-muted">{description}</p>}
     </div>
     {action}
@@ -47,18 +47,18 @@ export function CardHeader({ title, description, action }: { title: string; desc
 }
 
 export function PageHeader({ title, eyebrow, description, actions }: { title: string; eyebrow?: string; description?: string; actions?: ReactNode }) {
-  return <header className="mb-5 flex flex-wrap items-end justify-between gap-3 border-b border-line pb-5">
+  return <header className="mb-7 flex flex-wrap items-end justify-between gap-3">
     <div className="min-w-0">
-      {eyebrow && <p className="mb-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-brand-ink">{eyebrow}</p>}
-      <h1 className="text-[22px] font-semibold tracking-tight text-navy sm:text-2xl">{title}</h1>
-      {description && <p className="mt-1 text-sm text-muted">{description}</p>}
+      {eyebrow && <p className="mb-1.5 text-[13px] text-muted">{eyebrow}</p>}
+      <h1 className="text-[28px] font-medium tracking-[-0.02em] text-navy sm:text-[32px]">{title}</h1>
+      {description && <p className="mt-1.5 text-[15px] text-muted">{description}</p>}
     </div>
     {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
   </header>;
 }
 
 export function Logo({ className }: { className?: string }) {
-  return <span className={clsx("text-[15px] tracking-tight text-navy", className)}>{BRAND.first} <strong className="font-bold">{BRAND.second}</strong></span>;
+  return <span className={clsx("text-[15px] tracking-tight text-navy", className)}>{BRAND.first} <strong className="font-semibold">{BRAND.second}</strong></span>;
 }
 
 // The uploaded logo (public/logo.png) as a transparency mask (public/logo-mark.png),
@@ -79,21 +79,14 @@ export function Brand({ size = 32, className, textClassName }: { size?: number; 
   </span>;
 }
 
-const toneClass = {
-  good: "border-good/30 bg-good-soft text-good-ink",
-  warn: "border-warn/30 bg-warn-soft text-warn-ink",
-  bad: "border-bad/30 bg-bad-soft text-bad-ink",
-  brand: "border-brand-500/35 bg-brand-50 text-brand-ink",
-  purple: "border-purple/35 bg-purple-soft text-purple-ink",
-  neutral: "border-line-strong bg-neutral-soft text-neutral-ink",
-} as const;
-export type Tone = keyof typeof toneClass;
+export type Tone = "good" | "warn" | "bad" | "brand" | "purple" | "neutral";
 
+const toneText: Record<Tone, string> = { good: "text-good-ink", warn: "text-warn-ink", bad: "text-bad-ink", brand: "text-brand-ink", purple: "text-purple-ink", neutral: "text-neutral-ink" };
 export const stripeTone: Record<Tone, string> = { good: "bg-good", warn: "bg-warn", bad: "bg-bad", brand: "bg-brand-500", purple: "bg-purple", neutral: "bg-subtle" };
 
 export function Badge({ tone = "neutral", children }: { tone?: Tone; children: ReactNode }) {
-  return <span className={clsx("inline-flex items-center gap-1.5 whitespace-nowrap rounded border px-2 py-0.5 text-xs font-medium", toneClass[tone])}>
-    <span className="size-1.5 rounded-full bg-current" aria-hidden="true" />
+  return <span className={clsx("inline-flex items-center gap-2 whitespace-nowrap text-[13px]", toneText[tone])}>
+    <span className={clsx("size-1.5 rounded-full", stripeTone[tone])} aria-hidden="true" />
     {children}
   </span>;
 }
@@ -126,7 +119,7 @@ export function Progress({ value, className }: { value: number; className?: stri
 export function StatCard({ label, value, hint, icon }: { label: string; value: string; hint?: string; icon?: ReactNode }) {
   return <Card className="p-4">
     <div className="flex items-center justify-between text-[13px] text-muted">{label}{icon}</div>
-    <strong className="mt-1 block text-2xl font-semibold tabular-nums text-navy">{value}</strong>
+    <strong className="mt-2 block text-3xl font-medium tabular-nums tracking-tight text-navy">{value}</strong>
     {hint && <span className="mt-1 block text-[13px] text-muted">{hint}</span>}
   </Card>;
 }
@@ -139,7 +132,7 @@ export function Field({ label, hint, children }: { label: string; hint?: string;
   </label>;
 }
 
-export const inputClass = "h-10 w-full rounded-md border border-input bg-canvas px-3 text-sm text-ink outline-none transition placeholder:text-subtle focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 disabled:opacity-60";
+export const inputClass = "h-10 w-full rounded-lg border border-input bg-canvas px-3 text-sm text-ink outline-none transition placeholder:text-subtle focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 disabled:opacity-60";
 
 export function EmptyState({ title, description, action, icon }: { title: string; description: string; action?: ReactNode; icon?: ReactNode }) {
   return <div className="grid place-items-center px-6 py-12 text-center">
@@ -150,5 +143,5 @@ export function EmptyState({ title, description, action, icon }: { title: string
   </div>;
 }
 
-export const th = "px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-[0.08em] text-muted";
-export const td = "px-4 py-3 align-middle";
+export const th = "px-5 py-3 text-left text-[13px] font-normal text-muted";
+export const td = "px-5 py-3.5 align-middle";
