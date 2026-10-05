@@ -42,10 +42,10 @@ export function Sidebar({ credits, totalCredits, running }: { credits: number; t
 
   const item = (href: string, label: string, Icon: typeof Plug, badge?: number) => {
     const active = pathname.startsWith(href);
-    return <Link key={href} href={href} aria-current={active ? "page" : undefined} title={collapsed ? label : undefined} className={clsx("group flex h-10 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors", active ? "bg-surface-2 text-navy shadow-[inset_0_0_0_1px_var(--line-strong)]" : "text-nav hover:bg-nav-hover hover:text-navy", collapsed && "justify-center px-0")}>
+    return <Link key={href} href={href} aria-current={active ? "page" : undefined} title={collapsed ? label : undefined} className={clsx("group flex h-10 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors", active ? "bg-brand-600 text-white" : "text-nav hover:bg-nav-hover hover:text-navy", collapsed && "justify-center px-0")}>
       <Icon size={18} aria-hidden="true" className="shrink-0" />
       {!collapsed && <span className="flex-1">{label}</span>}
-      {!collapsed && badge ? <span className={clsx("rounded px-1.5 text-[11px] font-semibold tabular-nums", active ? "bg-brand-50 text-brand-ink" : "bg-surface-2 text-muted")}>{badge}</span> : null}
+      {!collapsed && badge ? <span className={clsx("rounded px-1.5 text-[11px] font-semibold tabular-nums", active ? "bg-white/20 text-white" : "bg-brand-50 text-brand-ink")}>{badge}</span> : null}
     </Link>;
   };
 
@@ -55,7 +55,7 @@ export function Sidebar({ credits, totalCredits, running }: { credits: number; t
     </div>
 
     <div className="flex flex-1 flex-col gap-1 overflow-y-auto p-3">
-      <Link href="/lists/new" title={collapsed ? "New list" : undefined} className={clsx("mb-4 flex h-10 items-center justify-center gap-2 rounded-lg bg-primary text-sm font-medium text-on-primary transition hover:bg-primary-hover")}>
+      <Link href="/lists/new" title={collapsed ? "New list" : undefined} className={clsx("mb-3 flex h-10 items-center justify-center gap-2 rounded-md border border-dashed border-brand-500 text-sm font-medium text-brand-ink transition hover:bg-brand-50")}>
         <Plus size={17} aria-hidden="true" />{!collapsed && "New list"}
       </Link>
       <nav className="grid gap-1" aria-label="Main">
@@ -85,7 +85,7 @@ export function BottomNav() {
     <div className="mx-auto grid max-w-md grid-cols-4">
       {items.map(({ href, label, icon: Icon }) => {
         const active = pathname.startsWith(href) || (href === "/profile/settings" && (pathname.startsWith("/profile") || pathname.startsWith("/help")));
-        return <Link key={href} href={href} aria-current={active ? "page" : undefined} className={clsx("relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium", active ? "text-navy" : "text-nav")}>
+        return <Link key={href} href={href} aria-current={active ? "page" : undefined} className={clsx("relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium", active ? "text-white" : "text-nav")}>
           {active && <span className="absolute inset-x-6 top-0 h-0.5 rounded-b bg-brand-500" aria-hidden="true" />}
           <Icon size={19} aria-hidden="true" />{label}
         </Link>;

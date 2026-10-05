@@ -38,7 +38,7 @@ export function ListDetailClient({ list: initial, contacts, availableCredits }: 
     <header className="mb-5 border-b border-line">
       <div className="flex flex-wrap items-start justify-between gap-3 pb-4">
         <div className="min-w-0">
-          <p className="mb-1.5 text-[13px] text-muted">List details</p>
+          <p className="mb-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-brand-ink">List details</p>
           <div className="flex flex-wrap items-center gap-2.5">
             <h1 className="text-[22px] font-semibold tracking-tight text-navy sm:text-2xl">{list.name || `List #${list.id}`}</h1>
             <StatusBadge value={list.status} />
@@ -54,7 +54,7 @@ export function ListDetailClient({ list: initial, contacts, availableCredits }: 
       </div>
       <nav className="-mb-px flex gap-1 overflow-x-auto" aria-label="List sections">
         {tabs.map(([value, label, count]) => <button key={value} onClick={() => setTab(value)} aria-current={tab === value ? "page" : undefined} className={clsx("flex shrink-0 items-center gap-2 border-b-2 px-3 py-2.5 text-sm font-medium transition", tab === value ? "border-brand-500 text-navy" : "border-transparent text-muted hover:text-ink")}>
-          {label}{count && <span className="rounded bg-surface-2 px-1.5 text-[11px] text-muted">{count}</span>}
+          {label}{count && <span className="rounded bg-surface-2 px-1.5 font-mono text-[11px] text-muted">{count}</span>}
         </button>)}
       </nav>
     </header>
@@ -72,12 +72,12 @@ export function ListDetailClient({ list: initial, contacts, availableCredits }: 
         </div>
         <div className="mt-5 flex items-end justify-between gap-3">
           <strong className="text-4xl font-semibold tabular-nums tracking-tight text-navy">{list.progress_percent}%</strong>
-          <span className="text-xs text-muted"><span className="text-ink">{number(list.processed_count)}</span> processed / {number(list.contact_count)} total</span>
+          <span className="font-mono text-xs text-muted"><span className="text-ink">{number(list.processed_count)}</span> processed / {number(list.contact_count)} total</span>
         </div>
         <Progress value={list.progress_percent} className="mt-3 h-2" />
         <dl className="mt-5 grid grid-cols-2 border-l border-t border-line sm:grid-cols-4">
           {([["Contacts", number(list.contact_count)], ["New / rerun", `${number(list.new_contact_count)} / ${number(list.rerun_contact_count)}`], ["Verified", number(list.verified_count)], ["Wrong person", number(list.wrong_person_count)], ["No engagement", number(list.no_engagement_count)], ["Failures", number(list.failure_count)], ["Credits consumed", number(list.credits_consumed)]] as const).map(([label, value]) => <div key={label} className="border-b border-r border-line px-3.5 py-3">
-            <dt className="text-xs text-muted">{label}</dt><dd className="mt-1 text-lg tabular-nums text-navy">{value}</dd>
+            <dt className="text-xs text-muted">{label}</dt><dd className="mt-1 font-mono text-lg tabular-nums text-navy">{value}</dd>
           </div>)}
         </dl>
       </Card>
@@ -96,12 +96,12 @@ export function ListDetailClient({ list: initial, contacts, availableCredits }: 
       <ul className="divide-y divide-line md:hidden">
         {contacts.map((contact) => <li key={contact.execution_id} className="px-4 py-3">
           <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0"><strong className="block truncate text-sm font-medium text-navy">{contact.contact_name || "Unknown contact"}</strong><span className="text-xs text-muted">{contact.phone_e164 || "Phone unavailable"}</span></div>
+            <div className="min-w-0"><strong className="block truncate text-sm font-medium text-navy">{contact.contact_name || "Unknown contact"}</strong><span className="font-mono text-xs text-muted">{contact.phone_e164 || "Phone unavailable"}</span></div>
             <StatusBadge value={classificationResultLabel(contact.processing_status)} />
           </div>
           <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs">
             <span className="text-muted">Result <span className="text-ink">{humanize(classificationResultLabel(contact.sureconnect_outcome || "Pending"))}</span></span>
-            <span className="text-muted">Confidence <span className="text-ink">{confidencePercent(contact.confidence)}</span></span>
+            <span className="text-muted">Confidence <span className="font-mono text-ink">{confidencePercent(contact.confidence)}</span></span>
           </div>
           {contact.priority_tier && <div className="mt-2"><StatusBadge value={priorityLabel(contact.priority_tier, contact.review_state)} label={priorityLabel(contact.priority_tier, contact.review_state)} /></div>}
         </li>)}
@@ -110,17 +110,17 @@ export function ListDetailClient({ list: initial, contacts, availableCredits }: 
         <table className="w-full min-w-[860px] text-sm">
           <thead><tr className="border-b border-line bg-surface-2"><th className={th}>Contact</th><th className={th}>Execution status</th><th className={th}>Result for this list</th><th className={`${th} text-right`}>Evidence confidence</th><th className={th}>Priority</th><th className={`${th} text-right`}>Updated</th></tr></thead>
           <tbody>{contacts.map((contact) => <tr key={contact.execution_id} className="border-b border-line last:border-0 hover:bg-nav-hover">
-            <td className={td}><span className="block whitespace-nowrap font-medium text-navy">{contact.contact_name || "Unknown contact"}</span><span className="text-xs text-muted">{contact.phone_e164 || "Phone unavailable"}</span></td>
+            <td className={td}><span className="block whitespace-nowrap font-medium text-navy">{contact.contact_name || "Unknown contact"}</span><span className="font-mono text-xs text-muted">{contact.phone_e164 || "Phone unavailable"}</span></td>
             <td className={td}><StatusBadge value={classificationResultLabel(contact.processing_status)} /></td>
             <td className={td}>{humanize(classificationResultLabel(contact.sureconnect_outcome || "Pending"))}</td>
-            <td className={`${td} text-right tabular-nums`}>{confidencePercent(contact.confidence)}</td>
+            <td className={`${td} text-right font-mono tabular-nums`}>{confidencePercent(contact.confidence)}</td>
             <td className={td}><StatusBadge value={priorityLabel(contact.priority_tier, contact.review_state)} label={priorityLabel(contact.priority_tier, contact.review_state)} /></td>
-            <td className={`${td} whitespace-nowrap text-right text-xs text-muted`}>{dateTime(contact.updated_at)}</td>
+            <td className={`${td} whitespace-nowrap text-right font-mono text-xs text-muted`}>{dateTime(contact.updated_at)}</td>
           </tr>)}</tbody>
         </table>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-4 py-3 text-[13px] text-muted">
-        <span className="text-xs">1–{contacts.length} of {number(list.contact_count)}</span>
+        <span className="font-mono text-xs">1–{contacts.length} of {number(list.contact_count)}</span>
         <div className="flex gap-2"><Button size="sm" variant="ghost" disabled>Previous</Button><Button size="sm" variant="ghost" disabled={contacts.length >= list.contact_count}>Next</Button></div>
       </div>
     </Card>}
@@ -147,7 +147,7 @@ export function ListDetailClient({ list: initial, contacts, availableCredits }: 
     </>}>
       <div className="grid grid-cols-3 divide-x divide-line rounded-md border border-line text-center">
         {([["Contacts", list.contact_count], ["Credits required", list.run_mode === "simulated" ? 0 : list.contact_count], ["Available credits", availableCredits]] as const).map(([label, value]) => <div key={label} className="px-2 py-3.5">
-          <span className="block text-xs text-muted">{label}</span><strong className="mt-0.5 block text-lg tabular-nums text-navy">{number(value)}</strong>
+          <span className="block text-xs text-muted">{label}</span><strong className="mt-0.5 block font-mono text-lg tabular-nums text-navy">{number(value)}</strong>
         </div>)}
       </div>
       <p className="mt-3 text-[13px] text-muted">Credits are reserved when you confirm. Your available balance is checked again at confirmation.</p>

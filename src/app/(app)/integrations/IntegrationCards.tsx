@@ -49,7 +49,7 @@ function ProviderDrawer({ item, onClose, onConnect, onDisconnect }: { item: Inte
       <header className="flex items-start gap-3 border-b border-line px-5 py-4">
         <span className="grid size-10 shrink-0 place-items-center rounded-md text-sm font-bold text-white" style={{ background: item.color }} aria-hidden="true">{item.initials}</span>
         <div className="min-w-0 flex-1">
-          <p className="text-[13px] text-muted">{item.displayName}</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-ink">{item.displayName}</p>
           <h2 id="drawer-title" className="text-base font-semibold text-navy">Connection details</h2>
           <p className="text-[13px] text-muted">{item.description}</p>
         </div>
@@ -158,8 +158,8 @@ export function IntegrationCards({ initial, exports }: { initial: Integration[];
             <p className="mt-1.5 flex-1 text-xs text-muted">{item.capabilityLabels.join(" · ")}</p>
 
             <dl className="mt-4 grid grid-cols-[2fr_3fr] gap-3 border-t border-line pt-3">
-              <div><dt className="text-xs text-muted">Linked contacts</dt><dd className="text-sm tabular-nums text-navy">{item.total_contacts?.toLocaleString() ?? "—"}</dd></div>
-              <div className="min-w-0"><dt className="text-xs text-muted">Last successful import</dt><dd className="truncate text-xs leading-5 text-navy">{item.last_successful_sync_at ? dateTime(item.last_successful_sync_at) : "—"}</dd></div>
+              <div><dt className="text-xs text-muted">Linked contacts</dt><dd className="font-mono text-sm tabular-nums text-navy">{item.total_contacts?.toLocaleString() ?? "—"}</dd></div>
+              <div className="min-w-0"><dt className="text-xs text-muted">Last successful import</dt><dd className="truncate font-mono text-xs leading-5 text-navy">{item.last_successful_sync_at ? dateTime(item.last_successful_sync_at) : "—"}</dd></div>
             </dl>
 
             <div className="mt-4 flex gap-2">
@@ -179,7 +179,7 @@ export function IntegrationCards({ initial, exports }: { initial: Integration[];
     <Card className="mt-4 overflow-hidden">
       <div className="flex flex-wrap items-end justify-between gap-3 border-b border-line px-4 py-3">
         <div>
-          <p className="text-[13px] text-muted">Export activity</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-ink">Export activity</p>
           <h2 className="mt-1 text-sm font-semibold text-navy">Recent exports</h2>
           <p className="text-[13px] text-muted">Durable jobs remain available after you leave this page.</p>
         </div>
@@ -190,9 +190,9 @@ export function IntegrationCards({ initial, exports }: { initial: Integration[];
           <thead><tr className="border-b border-line bg-surface-2"><th className={th}>Destination</th><th className={`${th} text-right`}>Contacts</th><th className={th}>Status</th><th className={`${th} text-right`}>Created</th></tr></thead>
           <tbody>{exports.map((job) => <tr key={job.id} className="border-b border-line last:border-0">
             <td className={`${td} font-medium text-navy`}>{job.destination}</td>
-            <td className={`${td} text-right tabular-nums`}>{number(job.contacts)}</td>
+            <td className={`${td} text-right font-mono tabular-nums`}>{number(job.contacts)}</td>
             <td className={td}><StatusBadge value={job.status} /></td>
-            <td className={`${td} whitespace-nowrap text-right text-xs text-muted`}>{dateTime(job.created_at)}</td>
+            <td className={`${td} whitespace-nowrap text-right font-mono text-xs text-muted`}>{dateTime(job.created_at)}</td>
           </tr>)}</tbody>
         </table>
       </div>
