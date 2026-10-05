@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import { History, UserPlus, Users } from "lucide-react";
 import { useState, type FormEvent } from "react";
+import { useToast } from "@/components/Toast";
 import { Button, Card, EmptyState, StatusBadge, inputClass, td, th } from "@/components/ui";
 import { dateTime, initials } from "@/lib/format";
 import type { AuditEvent, MemberRole, TeamMember } from "@/lib/types";
@@ -12,6 +13,7 @@ const ROLES: Array<[MemberRole, string]> = [["viewer", "Viewer"], ["operator", "
 type Section = "team" | "audit";
 
 export function SettingsPanels({ initialMembers, audit, currentUserId, canManage }: { initialMembers: TeamMember[]; audit: AuditEvent[]; currentUserId: number; canManage: boolean }) {
+  const toast = useToast();
   const [section, setSection] = useState<Section>("team");
   const [members, setMembers] = useState(initialMembers);
   const [email, setEmail] = useState("");
@@ -23,6 +25,7 @@ export function SettingsPanels({ initialMembers, audit, currentUserId, canManage
     setAdding(true);
     window.setTimeout(() => {
       setMembers((current) => [...current, { user_id: Date.now(), username: email.split("@")[0], email, role }]);
+      toast("Member added");
       setEmail("");
       setAdding(false);
     }, 400);
@@ -58,7 +61,7 @@ export function SettingsPanels({ initialMembers, audit, currentUserId, canManage
                 {ROLES.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
               </select>}
               <StatusBadge value={member.role} />
-              {editable && <Button size="sm" variant="ghost" onClick={() => setMembers((current) => current.filter((item) => item.user_id !== member.user_id))} aria-label={`Remove ${member.username}`}>Remove</Button>}
+              {editable && <Button size="sm" variant="ghost" onClick={() => { setMembers((current) => current.filter((item) => item.user_id !== member.user_id)); toast(`${member.username} removed`); }} aria-label={`Remove ${member.username}`}>Remove</Button>}
             </div>
           </li>;
         })}

@@ -16,7 +16,8 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
     <div className="pointer-events-none absolute -bottom-48 -right-40 size-[520px] rounded-full bg-[#7656c7]/10 blur-[120px]" aria-hidden="true" />
 
     <div className="relative grid w-full max-w-[960px] overflow-hidden rounded-xl border border-line-strong bg-surface shadow-[0_30px_80px_rgba(0,0,0,0.5)] md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-      <aside className="flex flex-col justify-between gap-8 border-b border-line bg-sidebar p-7 md:border-b-0 md:border-r md:p-9">
+      <aside className="relative isolate flex flex-col justify-between gap-8 overflow-hidden border-b border-line bg-linear-to-br from-[#22409f] via-[#14223d] to-[#0e1729] p-7 md:border-b-0 md:border-r md:p-9">
+        <svg className="pointer-events-none absolute -bottom-40 -right-40 -z-10 size-[460px] opacity-25" viewBox="0 0 400 400" aria-hidden="true">{[180, 150, 120, 90].map((r) => <circle key={r} cx="200" cy="200" r={r} fill="none" stroke="white" strokeWidth="1" />)}<circle cx="200" cy="200" r="150" fill="none" stroke="#7be0b6" strokeWidth="3" strokeDasharray="380 1000" strokeLinecap="round" /><circle cx="200" cy="200" r="120" fill="none" stroke="#9cb0ec" strokeWidth="3" strokeDasharray="260 1000" strokeDashoffset="-180" strokeLinecap="round" /></svg>
         <Link href="/login" className="flex items-center gap-3 self-start rounded-md" aria-label="Agent Gray home"><LogoMark size={44} /><Logo className="text-lg" /></Link>
         <div>
           <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-brand-ink">Contact verification workspace</p>

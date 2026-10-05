@@ -42,7 +42,7 @@ export function Sidebar({ credits, totalCredits, running }: { credits: number; t
 
   const item = (href: string, label: string, Icon: typeof Plug, badge?: number) => {
     const active = pathname.startsWith(href);
-    return <Link key={href} href={href} aria-current={active ? "page" : undefined} title={collapsed ? label : undefined} className={clsx("group flex h-10 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors", active ? "bg-brand-600 text-white" : "text-nav hover:bg-nav-hover hover:text-navy", collapsed && "justify-center px-0")}>
+    return <Link key={href} href={href} aria-current={active ? "page" : undefined} title={collapsed ? label : undefined} className={clsx("group flex h-10 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors", active ? "bg-linear-to-r from-[#315eea] to-[#2a4fc4] text-white shadow-[0_8px_20px_-8px_rgba(49,94,234,0.7)]" : "text-nav hover:bg-nav-hover hover:text-navy", collapsed && "justify-center px-0")}>
       <Icon size={18} aria-hidden="true" className="shrink-0" />
       {!collapsed && <span className="flex-1">{label}</span>}
       {!collapsed && badge ? <span className={clsx("rounded px-1.5 text-[11px] font-semibold tabular-nums", active ? "bg-white/20 text-white" : "bg-brand-50 text-brand-ink")}>{badge}</span> : null}

@@ -140,7 +140,7 @@ export function IntegrationCards({ initial, exports }: { initial: Integration[];
       <ul className="grid gap-3 p-3 sm:grid-cols-2 xl:grid-cols-3">
         {items.map((item) => {
           const connected = item.status === "Connected";
-          return <li key={item.provider} className="flex flex-col rounded-md border border-line bg-surface-2 p-4 transition hover:border-line-strong">
+          return <li key={item.provider} className="lift flex flex-col rounded-xl border border-line bg-linear-to-b from-[#18263f] to-surface-2 p-5 shadow-[var(--shadow-card)]">
             <div className="flex items-start gap-3">
               <span className="grid size-10 shrink-0 place-items-center rounded-md text-[13px] font-bold" style={{ background: `${item.color}26`, color: item.color, boxShadow: `inset 0 0 0 1px ${item.color}40` }} aria-hidden="true">{item.initials}</span>
               <div className="min-w-0 flex-1">

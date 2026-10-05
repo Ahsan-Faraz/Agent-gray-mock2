@@ -4,7 +4,9 @@ import clsx from "clsx";
 import { ArrowLeft, Play, RefreshCw, Square } from "lucide-react";
 import { useState } from "react";
 import { Modal } from "@/components/Modal";
-import { Button, ButtonLink, Card, Progress, StatusBadge, td, th } from "@/components/ui";
+import { Donut, Hero } from "@/components/premium";
+import { useToast } from "@/components/Toast";
+import { Button, ButtonLink, Card, StatusBadge, td, th } from "@/components/ui";
 import { classificationResultLabel, confidencePercent, dateTime, humanize, number, priorityLabel, sourceLabel } from "@/lib/format";
 import type { ContactList, ListContact } from "@/lib/types";
 
@@ -13,6 +15,7 @@ type Tab = "overview" | "contacts" | "analysis";
 
 export function ListDetailClient({ list: initial, contacts, availableCredits }: { list: ContactList; contacts: ListContact[]; availableCredits: number }) {
   const [list, setList] = useState(initial);
+  const toast = useToast();
   const [tab, setTab] = useState<Tab>("overview");
   const [rerunOpen, setRerunOpen] = useState(false);
   const [refreshTrestle, setRefreshTrestle] = useState(false);
@@ -24,11 +27,12 @@ export function ListDetailClient({ list: initial, contacts, availableCredits }: 
 
   const cancel = () => {
     const liveWarning = list.run_mode === "live" ? " New calls will stop; calls already being dispatched or in progress will finish and keep accepting provider callbacks." : " Completed results will be kept.";
-    if (window.confirm(`Cancel list #${list.id}? Cancelling will return ${number(remainingCredits)} unused credits to your available balance. ${number(list.credits_consumed)} credits already used for processed contacts will not be returned.${liveWarning}`)) setList({ ...list, status: "cancelled" });
+    if (window.confirm(`Cancel list #${list.id}? Cancelling will return ${number(remainingCredits)} unused credits to your available balance. ${number(list.credits_consumed)} credits already used for processed contacts will not be returned.${liveWarning}`)) { setList({ ...list, status: "cancelled" }); toast("List stopped. Unused credits returned."); }
   };
   const runAnalysis = () => {
     const refreshWarning = refreshTrestle ? " Trestle Caller Identification will be queried again first, followed by name matching." : " Existing Trestle names and details will be reused, followed by fresh LLM name matching.";
     if (!window.confirm(`This runs post-call analysis from stored call evidence and never starts a telephone call.${refreshWarning} Continue?`)) return;
+    toast("Stored analysis queued");
     setAnalysisMessage(`${completed} queued, 0 cached/existing, ${contacts.length - completed} skipped, 0 failed, 0 ${priorityLabel("P3")}. No telephone call was started.`);
   };
 
@@ -48,7 +52,7 @@ export function ListDetailClient({ list: initial, contacts, availableCredits }: 
         <div className="flex flex-wrap gap-2">
           <ButtonLink href="/lists" variant="ghost"><ArrowLeft size={15} aria-hidden="true" /> Back</ButtonLink>
           <Button variant="ghost" onClick={() => setRerunOpen(true)}><RefreshCw size={15} aria-hidden="true" /> Rerun list</Button>
-          {canStart && <Button onClick={() => setList({ ...list, status: "running" })}><Play size={15} aria-hidden="true" /> Start list</Button>}
+          {canStart && <Button onClick={() => { setList({ ...list, status: "running" }); toast("List started"); }}><Play size={15} aria-hidden="true" /> Start list</Button>}
           {canCancel && <Button variant="danger" onClick={cancel}><Square size={14} aria-hidden="true" /> {list.status === "scheduled" ? "Cancel list" : "Stop list"}</Button>}
         </div>
       </div>
@@ -64,27 +68,35 @@ export function ListDetailClient({ list: initial, contacts, availableCredits }: 
       <p className="mt-0.5 text-ink">The system starts this list on that date using the credits reserved at creation. Calls follow your workspace&apos;s receiver-local calling hours. Sundays and recognized US holidays remain closed.</p>
     </section>}
 
-    {tab === "overview" && <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-      <Card className="p-5">
+    {tab === "overview" && <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <Hero className="rise p-6 sm:p-7">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-[13px] text-muted">Created {dateTime(list.created_at)} · {sourceLabel(list.source_type)} · {list.run_mode} execution</p>
-          <Button size="sm" variant="ghost"><RefreshCw size={14} aria-hidden="true" /> Refresh</Button>
+          <p className="text-[13px] text-white/75">Created {dateTime(list.created_at)} · {sourceLabel(list.source_type)} · {list.run_mode} execution</p>
+          <button onClick={() => toast("Refreshed")} className="inline-flex h-8 items-center gap-2 rounded-lg bg-white/10 px-3 text-[13px] font-medium ring-1 ring-white/15 transition hover:bg-white/20"><RefreshCw size={14} aria-hidden="true" /> Refresh</button>
         </div>
-        <div className="mt-5 flex items-end justify-between gap-3">
-          <strong className="text-4xl font-semibold tabular-nums tracking-tight text-navy">{list.progress_percent}%</strong>
-          <span className="font-mono text-xs text-muted"><span className="text-ink">{number(list.processed_count)}</span> processed / {number(list.contact_count)} total</span>
+        <div className="mt-6 flex items-end justify-between gap-3">
+          <strong className="text-[54px] font-semibold leading-none tracking-tight tabular-nums">{list.progress_percent}%</strong>
+          <span className="pb-1 text-right text-sm text-white/75"><strong className="text-white">{number(list.processed_count)}</strong> processed<br />{number(list.contact_count)} total</span>
         </div>
-        <Progress value={list.progress_percent} className="mt-3 h-2" />
-        <dl className="mt-5 grid grid-cols-2 border-l border-t border-line sm:grid-cols-4">
-          {([["Contacts", number(list.contact_count)], ["New / rerun", `${number(list.new_contact_count)} / ${number(list.rerun_contact_count)}`], ["Verified", number(list.verified_count)], ["Wrong person", number(list.wrong_person_count)], ["No engagement", number(list.no_engagement_count)], ["Failures", number(list.failure_count)], ["Credits consumed", number(list.credits_consumed)]] as const).map(([label, value]) => <div key={label} className="border-b border-r border-line px-3.5 py-3">
-            <dt className="text-xs text-muted">{label}</dt><dd className="mt-1 font-mono text-lg tabular-nums text-navy">{value}</dd>
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-linear-to-r from-white/80 to-white transition-[width] duration-700" style={{ width: `${list.progress_percent}%` }} /></div>
+        <dl className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {([["Contacts", number(list.contact_count)], ["New / rerun", `${number(list.new_contact_count)} / ${number(list.rerun_contact_count)}`], ["Verified", number(list.verified_count)], ["Wrong person", number(list.wrong_person_count)], ["No engagement", number(list.no_engagement_count)], ["Failures", number(list.failure_count)], ["Credits consumed", number(list.credits_consumed)]] as const).map(([label, value]) => <div key={label} className="rounded-xl bg-white/[0.07] px-3.5 py-3 ring-1 ring-white/10">
+            <dt className="text-xs text-white/65">{label}</dt><dd className="mt-1 text-lg font-semibold tabular-nums">{value}</dd>
           </div>)}
         </dl>
-      </Card>
-      <Card className="self-start">
-        <h2 className="border-b border-line px-4 py-3 text-sm font-semibold text-navy">Execution status</h2>
-        <dl className="divide-y divide-line text-sm">
-          {([["State", humanize(list.status)], ["Reanalysis", analysisMessage ? "running (1 queued/running)" : "not run"], ["Remaining", number(Math.max(0, list.contact_count - list.processed_count))], ["Last updated", dateTime(list.updated_at)]] as const).map(([label, value]) => <div key={label} className="flex justify-between gap-3 px-4 py-2.5">
+      </Hero>
+      <Card className="rise flex flex-col p-5 [animation-delay:80ms]">
+        <h2 className="text-[15px] font-medium text-navy">Execution status</h2>
+        <div className="mt-4 flex justify-center">
+          <Donut size={136} stroke={12} segments={[
+            { label: "Verified", value: list.verified_count, color: "var(--good)" },
+            { label: "No engagement", value: list.no_engagement_count, color: "var(--warn)" },
+            { label: "Wrong person", value: list.wrong_person_count, color: "var(--bad)" },
+            { label: "Failures", value: list.failure_count, color: "var(--subtle)" },
+          ]} center={<strong className="block text-2xl font-semibold tabular-nums text-navy">{number(list.verified_count)}</strong>} caption="Verified" />
+        </div>
+        <dl className="mt-4 divide-y divide-line text-sm">
+          {([["State", humanize(list.status)], ["Reanalysis", analysisMessage ? "running (1 queued/running)" : "not run"], ["Remaining", number(Math.max(0, list.contact_count - list.processed_count))], ["Last updated", dateTime(list.updated_at)]] as const).map(([label, value]) => <div key={label} className="flex justify-between gap-3 py-2.5">
             <dt className="text-muted">{label}</dt><dd className="text-right font-medium">{value}</dd>
           </div>)}
         </dl>

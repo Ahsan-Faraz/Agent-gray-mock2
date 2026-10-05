@@ -8,9 +8,9 @@ import { BRAND, humanize } from "@/lib/format";
 type Variant = "primary" | "outline" | "ghost" | "danger";
 type Size = "sm" | "md";
 
-const buttonBase = "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-45";
+const buttonBase = "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45";
 const buttonVariant: Record<Variant, string> = {
-  primary: "bg-brand-600 text-white hover:bg-brand-700",
+  primary: "bg-linear-to-b from-[#3d69ef] to-[#2b55dd] text-white shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_8px_20px_-8px_rgba(49,94,234,0.75)] hover:from-[#4a74f2] hover:to-[#315eea]",
   outline: "border border-brand-500 text-brand-ink hover:bg-brand-50",
   ghost: "border border-line-strong bg-surface-2 text-ink hover:border-input hover:bg-nav-hover",
   danger: "border border-bad/50 text-bad-ink hover:bg-bad-soft",
@@ -33,7 +33,7 @@ export function ButtonLink({ variant = "primary", size = "md", className, ...pro
 }
 
 export function Card({ className, ...props }: ComponentProps<"section">) {
-  return <section className={clsx("rounded-lg border border-line bg-surface", className)} {...props} />;
+  return <section className={clsx("rounded-xl border border-line bg-linear-to-b from-[#132039] to-surface shadow-[var(--shadow-card)]", className)} {...props} />;
 }
 
 export function CardHeader({ title, description, action }: { title: string; description?: string; action?: ReactNode }) {

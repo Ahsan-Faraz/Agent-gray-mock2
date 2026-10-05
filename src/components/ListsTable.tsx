@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { Ring } from "@/components/premium";
 import { Progress, StatusBadge, stripeTone, toneFor, td, th } from "@/components/ui";
 import { dateTime, number, sourceLabel } from "@/lib/format";
 import type { ContactList } from "@/lib/types";
@@ -34,11 +35,15 @@ export function ListsTable({ lists }: { lists: ContactList[] }) {
           <th className={`${th} pl-5`}>Name</th><th className={th}>Source</th><th className={th}>Created</th><th className={th}>Status</th><th className={`${th} text-right`}>Contacts</th><th className={`${th} text-right`}>New / rerun</th><th className={`${th} w-48`}>Progress</th><th className={th}><span className="sr-only">Open</span></th>
         </tr></thead>
         <tbody>
-          {lists.map((list) => <tr key={list.id} className="group relative border-b border-line last:border-0 hover:bg-nav-hover">
-            <td className={`${td} relative pl-5`}>
-              <span className={clsx("absolute inset-y-2 left-0 w-[3px] rounded-r", stripeTone[toneFor(list.status)])} aria-hidden="true" />
-              <Link href={`/lists/${list.id}`} className="block font-medium text-navy hover:text-brand-ink">{list.name || `List #${list.id}`}</Link>
-              <span className="text-xs text-muted">{list.description || `List #${list.id}`}</span>
+          {lists.map((list) => <tr key={list.id} className="group relative border-b border-line transition-colors last:border-0 hover:bg-white/[0.03]">
+            <td className={`${td} pl-5`}>
+              <div className="flex items-center gap-3">
+                <Ring value={list.progress_percent} size={36} />
+                <div className="min-w-0">
+                  <Link href={`/lists/${list.id}`} className="block font-medium text-navy hover:text-brand-ink">{list.name || `List #${list.id}`}</Link>
+                  <span className="text-xs text-muted">{list.description || `List #${list.id}`}</span>
+                </div>
+              </div>
             </td>
             <td className={`${td} whitespace-nowrap text-ink`}>{sourceLabel(list.source_type)}</td>
             <td className={`${td} whitespace-nowrap font-mono text-xs text-muted`}>{dateTime(list.created_at)}</td>
