@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+/* Mockup 2 is dark only. Hues come from callsure-frontend/src/index.css
+   (brand #315eea, navy #152238, green, red, amber, purple); surfaces are
+   navy shades so long tables stay readable. Every text pair is WCAG AA. */
+:root {
+  --canvas: #0b1220;
+  --surface: #111a2e;
+  --surface-2: #16223a;
+  --line: #22304a;
+  --line-strong: #2f4063;
+  --input: #6474a0;
+  --ink: #e6ebf3;
+  --navy: #f5f7fb;
+  --muted: #9aa6bb;
+  --subtle: #7d889c;
+
+  --brand-50: #1a2a52;
+  --brand-100: #233766;
+  --brand-200: #8fa8f7;
+  --brand-500: #4f76f0;
+  --brand-600: #315eea;
+  --brand-700: #2448be;
+  --brand-ink: #8fa8f7;
+
+  --nav: #a7b1c6;
+  --nav-hover: #18243d;
+  --sidebar: #0e1729;
+
+  --good: #3cb889;
+  --good-soft: #11342a;
+  --good-ink: #5fd3a4;
+  --warn: #e0a043;
+  --warn-soft: #35270f;
+  --warn-ink: #f0b45a;
+  --bad: #e06565;
+  --bad-soft: #3a1b20;
+  --bad-ink: #f08a8a;
+  --purple: #9a7fe0;
+  --purple-soft: #251e44;
+  --purple-ink: #bba6f5;
+  --neutral-soft: #1e2a42;
+  --neutral-ink: #b4bdcc;
+
+  --overlay: rgba(3, 6, 14, 0.7);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jet), ui-monospace, monospace;
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-input: var(--input);
+  --color-ink: var(--ink);
+  --color-navy: var(--navy);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-ink: var(--brand-ink);
+
+  --color-nav: var(--nav);
+  --color-nav-hover: var(--nav-hover);
+  --color-sidebar: var(--sidebar);
+
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-good-ink: var(--good-ink);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-ink: var(--warn-ink);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-bad-ink: var(--bad-ink);
+  --color-purple: var(--purple);
+  --color-purple-soft: var(--purple-soft);
+  --color-purple-ink: var(--purple-ink);
+  --color-neutral-soft: var(--neutral-soft);
+  --color-neutral-ink: var(--neutral-ink);
+  --color-info-soft: var(--brand-50);
+  --color-info-ink: var(--brand-ink);
+  --color-overlay: var(--overlay);
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-feature-settings: "cv11", "ss01";
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand-500);
+  outline-offset: 2px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); }
+
+/* Faint grid texture for the auth backdrop only. */
+@utility grid-backdrop {
+  background-image:
+    linear-gradient(to right, rgba(143, 168, 247, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(143, 168, 247, 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
